@@ -26,7 +26,7 @@ class Client:
 
     def responce(self):
         return {
-            "rating": self.user.rating,
+            "rating": self.user.status['name'],
             "money": self.user.money,
             "env": self.environment.response(),
             "news": NewsList.get_last().response(),
@@ -239,7 +239,7 @@ class User:
     )
     status = statuses[0]
     rating = 4
-    name = 'Василий П.'
+    name = 'Ivan'
 
     def __init__(self):
         self.last_salary = datetime.now()
@@ -337,7 +337,30 @@ class History:
 
 
 class Rating:
-    pass
+    players = {
+        4: 'Dmitriy',
+        7: 'Sergei',
+        24: 'Semyon',
+        79: 'Vladimir'
+    }
+
+    @classmethod
+    def get_rating(cls, client):
+        # it's a dummy!
+        response = []
+        cls.players[client.user.rating] = client.user.name
+        for key in sorted(cls.players, reverse=True):
+            response.append({
+                'rating': key,
+                'name': cls.players[key]
+            })
+        cls.players = {
+            4: 'Dmitriy',
+            7: 'Sergei',
+            24: 'Semyon',
+            79: 'Vladimir'
+        }
+        return response
 
 
 class NewsList:
@@ -388,10 +411,46 @@ class Buff:
 
 
 class BetterCallAdmin(Buff):
-    name = "Позвать сисадмина"
+    name = "Вызвать сисадмина"
     cost = 500
-    description = "Позвонить Диме Каданцеву. Вы точно этого хотите?"
+    description = "Вызвать системного администратора, который осуществит техническое обслуживание."
     id = 1
+
+    @classmethod
+    def action(cls, client):
+        client.environment.adminated()
+        client.user.purchase(cls.cost)
+
+
+class UpgrageAntivirus(Buff):
+    name = "Купить месяц pro-версии антивируса"
+    cost = 5000
+    description = "pro-версия антивируса автоматически проверяет файл при скачивании. Больше никаких зловредов в почте!"
+    id = 2
+
+    @classmethod
+    def action(cls, client):
+        client.environment.adminated()
+        client.user.purchase(cls.cost)
+
+
+class DiagnosePc(Buff):
+    name = "Провести автоматическую диагностику"
+    cost = 100
+    description = "За небольшую сумму Вы получаете подсказку, как решить проблему самостоятельно."
+    id = 3
+
+    @classmethod
+    def action(cls, client):
+        client.environment.adminated()
+        client.user.purchase(cls.cost)
+
+
+class MakeBackup(Buff):
+    name = "Сделать облачный бэкап"
+    cost = 200
+    description = "Сделать резервный образ системы и загрузить его в облако, дабы защитить от атак на файловую систему."
+    id = 4
 
     @classmethod
     def action(cls, client):
@@ -412,9 +471,31 @@ class Offense:
 
 class SpamEverywhere(Offense):
     name = "Заказать спам"
-    cost = 2000
-    description = "Заказать спам на всех игроков, кроме себя. Вам срочно нужно продать самогонный аппарат?"
+    cost = 1000
+    description = "Заказать спам на всех игроков, кроме себя. Просто ради забавы."
     id = 101
+
+    @classmethod
+    def action(cls, client):
+        client.user.purchase(cls.cost)
+
+
+class UseKnownExploit(Offense):
+    name = "Заказать Exploit-атаку"
+    cost = 2000
+    description = "Заказать атаку по нескольким игрокам, используя известную уязвимость. Успех зависит от версии антивирусных баз."
+    id = 102
+
+    @classmethod
+    def action(cls, client):
+        client.user.purchase(cls.cost)
+
+
+class SpamMailExploit(Offense):
+    name = "Заказать спам с червем"
+    cost = 5000
+    description = "Заказать спам со зловредом по игрокам, при каждом открытии которого Вы получите немного денег."
+    id = 103
 
     @classmethod
     def action(cls, client):
@@ -424,9 +505,14 @@ class SpamEverywhere(Offense):
 class Shop:
     buffs = [
         BetterCallAdmin,
+        UpgrageAntivirus,
+        DiagnosePc,
+        MakeBackup,
     ]
     offenses = [
         SpamEverywhere,
+        UseKnownExploit,
+        SpamMailExploit
     ]
 
     @classmethod

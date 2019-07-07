@@ -11,6 +11,7 @@ api_mapping = {
     'shopaction': lambda client, params: shopaction(client, **params),
     'history': lambda client, params: history(client),
     'run_test_scenario': lambda client, params: run_test_scenario(),
+    'rating': lambda client, params: rating(client),
 }
 
 
@@ -39,10 +40,14 @@ def shopaction(client, type, id):
     if type == 'buff':
         buff = [buff for buff in Shop.buffs if buff.id == id][0]
         buff.action(client)
-    if type == 'offence':
+    if type == 'offense':
         offense = [offense for offense in Shop.offenses if offense.id == id][0]
         offense.action(client)
     return client.responce()
+
+
+def rating(client):
+    return Rating.get_rating(client)
 
 
 def history(client):

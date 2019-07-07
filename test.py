@@ -26,6 +26,7 @@ j = json.dumps({'functionName': 'common',
                 'uuid': guid,
                 'data': None,
                 })
+r = requests.post(url=url, json=j)
 pp.pprint(j)
 pp.pprint(r.json())
 
@@ -102,6 +103,24 @@ pp.pprint(r.json())
 
 pp.pprint('Получи статусы')
 j = json.dumps({'functionName': 'mainscreen',
+                'uuid': guid,
+                'data': None,
+                })
+pp.pprint(j)
+r = requests.post(url=url, json=j)
+pp.pprint(r.json())
+
+pp.pprint('Рейтинг')
+j = json.dumps({'functionName': 'rating',
+                'uuid': guid,
+                'data': None,
+                })
+pp.pprint(j)
+r = requests.post(url=url, json=j)
+pp.pprint(r.json())
+
+pp.pprint('Рейтинг')
+j = json.dumps({'functionName': 'rating',
                 'uuid': guid,
                 'data': None,
                 })
