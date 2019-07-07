@@ -430,7 +430,6 @@ class UpgrageAntivirus(Buff):
 
     @classmethod
     def action(cls, client):
-        client.environment.adminated()
         client.user.purchase(cls.cost)
 
 
@@ -442,7 +441,6 @@ class DiagnosePc(Buff):
 
     @classmethod
     def action(cls, client):
-        client.environment.adminated()
         client.user.purchase(cls.cost)
 
 
@@ -454,7 +452,6 @@ class MakeBackup(Buff):
 
     @classmethod
     def action(cls, client):
-        client.environment.adminated()
         client.user.purchase(cls.cost)
 
 
